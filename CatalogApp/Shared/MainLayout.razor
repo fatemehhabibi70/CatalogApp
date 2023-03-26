@@ -1,17 +1,28 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudThemeProvider  IsDarkMode="_isDarkMode"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<MudLayout>
+    <AppBar OnSidebarToggled="ToggleSidebar" OnThemeToggled="ToggleTheme"></AppBar>
+    <NavMenu SideBarOpen="_sideBarOpen"></NavMenu>
+    <MudMainContent> @Body</MudMainContent>
+</MudLayout>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+
+@code{
+    private bool _sideBarOpen = false;
+    private bool _isDarkMode = false;
+
+    private void ToggleSidebar()
+    {
+        _sideBarOpen = !_sideBarOpen;
+    }
+
+    private void ToggleTheme()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+}
