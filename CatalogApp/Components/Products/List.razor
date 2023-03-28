@@ -1,9 +1,22 @@
 ﻿
-<MudTable Items="@products" Filter="new Func<Product,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudTable ServerData="GetServerDataAsync"
+          Hover="true"
+          T="Product"
+          FixedFooter="true"
+          FixedHeader="true"
+          Filter="new Func<Product,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Products</MudText>
         <MudSpacer />
-        <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField 
+                      T="string"
+                      ValueChanged="SearchTextChanged"
+                      Placeholder="Search"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0">
+        </MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Id</MudTh>
@@ -22,37 +35,3 @@
     </PagerContent>
 </MudTable>
 
-@code {
-    private string searchString1 = "";
-    private Product selectedItem1 = null;
-    private HashSet<Product> selectedItems = new HashSet<Product>();
-
-    private IEnumerable<Product> products;
-
-    /*
-    protected override async Task OnInitializedAsync()
-    {
-    }
-    */
-
-    protected override void OnInitialized()
-    {
-        products = new List<Product>
-        {
-            new Product {Id = 1, Name = "N1", Price = 100, Description = "Desc1"},
-            new Product {Id = 2, Name = "N2", Price = 200, Description = "Desc2"},
-            new Product {Id = 2, Name = "N2", Price = 200, Description = "Desc2"},
-        };
-    }
-
-    private bool FilterFunc1(Product Product) => FilterFunc(Product, searchString1);
-
-    private bool FilterFunc(Product product, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (product!.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
-}
